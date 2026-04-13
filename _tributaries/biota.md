@@ -218,17 +218,6 @@ living soils. The crusts hold soils in place during windstorms and hold moisture
 
 Navajo story of snake - rain and entanglement
 
-## Beavers
-
-- leaky dams, slow the water, allowing plants to root
-
-## Mammoth
-
-Wooly Mammoths used to live in Glen Canyon, according to dung found in Bechan Cave. There are petroglyph carvings of mammoths as well. 
-
-## Antelope
-
-Antelope cannot cross river anymore
 
 ## Fish
 
@@ -236,15 +225,6 @@ prior to 1973, state and federal governments stocked non-native sport fish and i
 
 Humans are transporting pikeminnows and razorbacks in buckets up Fatt Falls, a waterfall that formed because of sedimenation. But the waterfall separates them from invasive predators. (Podmore 145)
 
-## Dinosaurs
-
-- extinction + fossils
-
-Much of Navajo Sandstone has "churned by insects and trampled by reptiles" (Loope and Rowe 2003, p. 223). Evidence of stromatalites has also been found, which are laminated growth structures created by microbes. 
-
-## Plants
-
-At first, invasive species like tumbleweed, cheatgrass, and camelthorn take root. But after a few years, native species come back. Fremont fcottonwood, coyote willow, Goodding's willow, Indian paintbrush, hackberry, Western redbuds, singleleaf ash, miadenhair fern, columbine
 
 
 ## Works Cited
