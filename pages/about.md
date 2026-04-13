@@ -2,6 +2,7 @@
 title: About
 layout: about
 permalink: /about.html
+sticky-nav: true
 # include CollectionBuilder info at bottom
 credits: false
 # Edit the markdown on in this file to describe your collection
@@ -25,7 +26,7 @@ When the Glen Canyon Dam drowned Glen Canyon, it also subsumed the lives and his
 
 ## About *Sedimentation*
 
-{% include feature/image-gallery.html objectid="sediment22" width="50" caption=false%}
+{% include feature/image.html objectid="sediment22" width="50" caption=false %}
 
 *Sedimentation* is a multimedia exploration of Glen Canyon's entangled human and natural histories, traced through the sedimentary archive. It is also an exploration of narrative form, and is driven by the questions:
 
@@ -64,7 +65,7 @@ When the Glen Canyon Dam drowned Glen Canyon, it also subsumed the lives and his
 
 ## Want to Take Action?
 
-{% include feature/image-gallery.html objectid="sediment215" width="50" caption=false %}
+{% include feature/image.html objectid="sediment215" width="50" caption=false %}
 
 Since John Wesley Powell's first trip down the Colorado River in 1869, the American Government has treated Glen Canyon like a resource free for the taking. But Glen Canyon is not a resource, nor was it ever free to take: Glen Canyon is a vibrant ecosystem, and it has nourished both Indigenous Nations and multispecies communities since time immemorial.
 
