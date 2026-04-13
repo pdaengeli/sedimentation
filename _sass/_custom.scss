@@ -225,27 +225,6 @@ article{
   animation: gentleWave 12s ease-in-out infinite;
 }
 
-/* 
-.tributary-particles {
-  /* Flowing particles animation 
-  animation: flowDown 2s linear infinite;
-}
-
-.tributary-streaks {
-  /* Faster streak flow 
-  animation: flowDown 2s linear infinite;
-}
-
-@keyframes flowDown {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(5px); 
-    /* Matches pattern height
-  }
-}*/
-
 @keyframes gentleWave {
   0%, 100% {
     opacity: 0.6;
@@ -284,11 +263,6 @@ article{
 .tributary-path {
   /* Ensure smooth path rendering */
   vector-effect: non-scaling-stroke;
-}
-
-/* Remove the old canvas styles since we're not using it anymore */
-.tributary-canvas {
-  display: none;
 }
 
 /* Responsive adjustments for tributary river */
