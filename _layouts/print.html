@@ -36,8 +36,7 @@
 
   <!-- Google Fonts: Spectral + Inconsolata -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Spectral:ital,wght@0,200;0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" as="style" onload="this.onload=null;this.rel=''stylesheet''"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap"></noscript>
 
   <!-- Print-only CSS (NOT cb.css — that loads globally and would break the live site) -->
   <link rel="stylesheet" href="{{ '/assets/css/print.css' | relative_url }}">
@@ -248,7 +247,10 @@
       document.querySelectorAll('img').forEach(function(img) {
         if (!img.hasAttribute('alt')) {
           img.setAttribute('alt', '');
+           
         }
+         img.removeAttribute('loading');
+        img.removeAttribute('style');
       });
 
       // 5b. Ensure <figure> elements have an accessible label for the PDF
