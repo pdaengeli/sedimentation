@@ -92,6 +92,10 @@
     white-space: nowrap;
 }
 
+.card {
+    background: transparent !important; 
+}
+
 @media (max-width: 576px) {
     .date-range-inputs {
         width: auto; /* Let it size naturally instead of fixed 60% */

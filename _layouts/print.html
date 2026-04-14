@@ -6,40 +6,40 @@
     - Individual tributary essay print pages (/print/[slug]/)
     - Full book PDF (/print/book/)
 
-  Paged.js is loaded from CDN and intercepts window.print(),
-  laying out content into paginated @page boxes with running
-  headers (named strings), page counters, and proper margins.
-
-  Fonts: Spectral (body/display) + Inconsolata (UI/labels)
-  loaded from Google Fonts — these must be present for correct
-  PDF output; Paged.js captures the full rendered page.
-
-  Format override: ?format=a4 or ?format=69 injects a <style>
-  tag overriding @page { size } before Paged.js initializes.
-
-  Book mode: page.book == true — loops all site.tributaries
-  in order. ?essays=land,atmosphere,... hides unselected chapters.
+  ACCESSIBILITY APPROACH:
+  Chrome's print-to-PDF generates tagged PDF structure from the HTML
+  accessibility tree. To produce a usable tagged PDF we:
+    - Provide document-level metadata (title, author, language, description)
+    - Use semantic HTML landmarks (<main>, proper heading hierarchy)
+    - Mark all decorative SVGs aria-hidden="true" so they're invisible to AT
+    - Use a Paged.js afterRendered handler to mark injected margin boxes
+      (running headers, page numbers) aria-hidden — without this, every
+      running header is read aloud on every page by screen readers
+    - Set window.PagedConfig = { auto: false } to control render timing
+      so the handler is registered before layout begins
+    - Apply DPUB-ARIA roles to footnote sections (role="doc-endnotes")
+    - Preserve img alt text from collection metadata throughout
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-    {% if page.book %}
-      Sedimentation: An Archive of Glen Canyon — Print Edition
-    {% elsif page.tributary %}
-      {% for trib in site.tributaries %}{% if trib.slug == page.tributary %}{{ trib.title }} — Sedimentation{% endif %}{% endfor %}
-    {% else %}
-      {{ page.title | default: "Print" }} — Sedimentation
-    {% endif %}
-  </title>
+
+  <!-- PDF metadata: Chrome uses <title> for document title, <meta name="author"> for author -->
+  <title>{% if page.book %}Sedimentation: An Archive of Glen Canyon — Print Edition{% elsif page.tributary %}{% for trib in site.tributaries %}{% if trib.slug == page.tributary %}{{ trib.title }} — Sedimentation: An Archive of Glen Canyon{% endif %}{% endfor %}{% else %}{{ page.title | default: "Print" }} — Sedimentation{% endif %}</title>
+
+  <meta name="author" content="Hannah Green">
+  <meta name="description" content="{% if page.book %}Complete print edition of Sedimentation: An Archive of Glen Canyon{% elsif page.tributary %}{% for trib in site.tributaries %}{% if trib.slug == page.tributary %}{{ trib.title }} — from Sedimentation: An Archive of Glen Canyon{% endif %}{% endfor %}{% else %}{{ page.title }} — Sedimentation: An Archive of Glen Canyon{% endif %}">
+
+  <!-- Prevent Paged.js from auto-rendering before we register our accessibility handler -->
+  <script>window.PagedConfig = { auto: false };</script>
 
   <!-- Google Fonts: Spectral + Inconsolata -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Spectral:ital,wght@0,200;0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
-  <!-- Print-only CSS (standalone — NOT cb.css which loads globally and would break the live site) -->
+  <!-- Print-only CSS (NOT cb.css — that loads globally and would break the live site) -->
   <link rel="stylesheet" href="{{ '/assets/css/print.css' | relative_url }}">
 
   <!-- Format override: reads ?format= URL param and injects @page size rule -->
@@ -52,50 +52,41 @@
         document.head.insertAdjacentHTML('beforeend',
           '<style>@page { size: ' + sizes[format] + '; }</style>');
       }
-      // Store for format selector buttons
       window._printFormat = format;
     })();
   </script>
 </head>
 <body class="has-print-bar print-body">
 
-  <!-- ============================================================
-       SCREEN-ONLY CONTROL BAR
-       Hidden by CSS @media print
-       ============================================================ -->
-  <div class="print-control-bar">
-    <span class="print-control-title">
-      {% if page.book %}
-        Sedimentation — Full Book
-      {% elsif page.tributary %}
-        {% for trib in site.tributaries %}{% if trib.slug == page.tributary %}{{ trib.title }}{% endif %}{% endfor %}
-      {% else %}
-        {{ page.title }}
-      {% endif %}
+  <!-- Screen-only control bar — hidden at print time via CSS -->
+  <nav class="print-control-bar" aria-label="Print controls">
+    <span class="print-control-title" aria-live="polite">
+      {% if page.book %}Sedimentation — Full Book
+      {% elsif page.tributary %}{% for trib in site.tributaries %}{% if trib.slug == page.tributary %}{{ trib.title }}{% endif %}{% endfor %}
+      {% else %}{{ page.title }}{% endif %}
     </span>
 
     <a href="{{ '/print/' | relative_url }}" class="print-back-link">← Print Hub</a>
 
-    <div class="format-selector" role="group" aria-label="Page format">
-      <button class="format-btn" data-format="letter">Letter</button>
-      <button class="format-btn" data-format="a4">A4</button>
-      <button class="format-btn" data-format="69">6×9″</button>
+    <div class="format-selector" role="group" aria-label="Page size">
+      <button class="format-btn" data-format="letter" aria-pressed="false">Letter</button>
+      <button class="format-btn" data-format="a4" aria-pressed="false">A4</button>
+      <button class="format-btn" data-format="69" aria-pressed="false">6×9″</button>
     </div>
 
     <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
-  </div>
+  </nav>
 
-  <!-- ============================================================
-       PRINT CONTENT
-       ============================================================ -->
+  <!-- Main content — landmark used by screen readers to skip to content -->
+  <main id="print-content">
 
   {% if page.book %}
     <!-- ==================== BOOK MODE ==================== -->
 
-    <!-- Cover page -->
+    <!-- Cover page — decorative SVG is aria-hidden -->
     <div class="print-cover-page">
-      <div class="print-cover-ornament">
-        <svg width="120" height="24" viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg">
+      <div class="print-cover-ornament" aria-hidden="true">
+        <svg width="120" height="24" viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
           <circle cx="20"  cy="12" r="7"   fill="#CD853F" opacity="0.55"/>
           <circle cx="45"  cy="12" r="5"   fill="#D2691E" opacity="0.45"/>
           <circle cx="65"  cy="12" r="6.5" fill="#F4A460" opacity="0.50"/>
@@ -103,10 +94,8 @@
           <circle cx="105" cy="12" r="6"   fill="#A0522D" opacity="0.50"/>
         </svg>
       </div>
-
       <h1 class="print-cover-title">Sedimentation</h1>
       <p class="print-cover-subtitle">An Archive of Glen Canyon</p>
-
       <div class="print-cover-meta">
         Hannah Green<br>
         Center for Digital Inquiry and Learning<br>
@@ -114,27 +103,24 @@
       </div>
     </div>
 
-    <!-- Table of Contents -->
-    <div class="print-toc">
+    <!-- Table of contents — nav landmark so AT can jump to it -->
+    <nav class="print-toc" aria-label="Table of contents">
       <h2>Contents</h2>
       <ol>
         {% assign sorted_tribs = site.tributaries | sort: "order" %}
         {% for trib in sorted_tribs %}
-        <li>
-          <a href="#chapter-{{ trib.slug }}">{{ trib.title }}</a>
-        </li>
+        <li><a href="#chapter-{{ trib.slug }}">{{ trib.title }}</a></li>
         {% endfor %}
       </ol>
-    </div>
+    </nav>
 
-    <!-- Chapters -->
+    <!-- Chapters — each is a self-contained article -->
     {% for trib in sorted_tribs %}
-    <div class="print-chapter" id="chapter-{{ trib.slug }}" data-tributary="{{ trib.slug }}">
+    <article class="print-chapter" id="chapter-{{ trib.slug }}" data-tributary="{{ trib.slug }}" aria-label="{{ trib.title }}">
 
-      <!-- Chapter title page -->
       <div class="print-title-page">
-        <div class="print-ornament">
-          <svg width="80" height="16" viewBox="0 0 80 16" xmlns="http://www.w3.org/2000/svg">
+        <div class="print-ornament" aria-hidden="true">
+          <svg width="80" height="16" viewBox="0 0 80 16" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
             <circle cx="14"  cy="8" r="5"   fill="#CD853F" opacity="0.6"/>
             <circle cx="40"  cy="8" r="4"   fill="#D2691E" opacity="0.5"/>
             <circle cx="66"  cy="8" r="5"   fill="#DEB887" opacity="0.55"/>
@@ -145,29 +131,25 @@
         <p class="print-essay-meta">Hannah Green · CDIL · University of Idaho</p>
       </div>
 
-      <!-- Chapter content -->
       <div class="print-essay-body">
         {{ trib.content }}
       </div>
 
-    </div>
+    </article>
     {% endfor %}
 
   {% elsif page.tributary %}
     <!-- ==================== SINGLE ESSAY MODE ==================== -->
     {% assign found_trib = nil %}
     {% for trib in site.tributaries %}
-      {% if trib.slug == page.tributary %}
-        {% assign found_trib = trib %}
-      {% endif %}
+      {% if trib.slug == page.tributary %}{% assign found_trib = trib %}{% endif %}
     {% endfor %}
 
     {% if found_trib %}
 
-      <!-- Essay title page -->
       <div class="print-title-page">
-        <div class="print-ornament">
-          <svg width="80" height="16" viewBox="0 0 80 16" xmlns="http://www.w3.org/2000/svg">
+        <div class="print-ornament" aria-hidden="true">
+          <svg width="80" height="16" viewBox="0 0 80 16" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
             <circle cx="14"  cy="8" r="5"   fill="#CD853F" opacity="0.6"/>
             <circle cx="40"  cy="8" r="4"   fill="#D2691E" opacity="0.5"/>
             <circle cx="66"  cy="8" r="5"   fill="#DEB887" opacity="0.55"/>
@@ -178,7 +160,6 @@
         <p class="print-essay-meta">Hannah Green · CDIL · University of Idaho</p>
       </div>
 
-      <!-- Essay body -->
       <div class="print-essay-body">
         {{ found_trib.content }}
       </div>
@@ -190,71 +171,170 @@
     {% endif %}
 
   {% else %}
-    <!-- Fallback: render page content directly -->
-    <div class="print-essay-body">
-      {{ content }}
-    </div>
+    <div class="print-essay-body">{{ content }}</div>
   {% endif %}
+
+  </main><!-- end #print-content -->
 
 
   <!-- ============================================================
-       PRE-PAGED.JS PREP SCRIPT
-       Runs before Paged.js to:
-       1. Insert section-end ornaments before .trib-choice-container
-       2. Relabel .footnotes heading to "Notes"
-       3. Handle book chapter filtering (?essays= param)
+       PRE-RENDER PREP — runs before Paged.js lays out pages
        ============================================================ -->
   <script>
-    // 1. Insert section-end ornaments before each choice container
-    document.querySelectorAll('.trib-choice-container').forEach(function(el) {
-      var ornament = document.createElement('div');
-      ornament.className = 'section-end-ornament';
-      ornament.innerHTML = '<svg width="60" height="12" viewBox="0 0 60 12" xmlns="http://www.w3.org/2000/svg">' +
-        '<circle cx="10" cy="6" r="3.5" fill="#CD853F" opacity="0.6"/>' +
-        '<circle cx="30" cy="6" r="2.5" fill="#D2691E" opacity="0.5"/>' +
-        '<circle cx="50" cy="6" r="3.5" fill="#DEB887" opacity="0.55"/>' +
-        '</svg>';
-      el.parentNode.insertBefore(ornament, el);
-    });
+    (function() {
+      // 1. Insert section-end ornaments before each choice container.
+      //    aria-hidden so screen readers skip the decorative circles.
+      document.querySelectorAll('.trib-choice-container').forEach(function(el) {
+        var ornament = document.createElement('div');
+        ornament.className = 'section-end-ornament';
+        ornament.setAttribute('aria-hidden', 'true');
+        ornament.innerHTML = '<svg width="60" height="12" viewBox="0 0 60 12"' +
+          ' xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">' +
+          '<circle cx="10" cy="6" r="3.5" fill="#CD853F" opacity="0.6"/>' +
+          '<circle cx="30" cy="6" r="2.5" fill="#D2691E" opacity="0.5"/>' +
+          '<circle cx="50" cy="6" r="3.5" fill="#DEB887" opacity="0.55"/>' +
+          '</svg>';
+        el.parentNode.insertBefore(ornament, el);
+      });
 
-    // 2. Rename footnotes heading to "Notes"
-    var footnotesHeading = document.querySelector('section.footnotes h2');
-    if (footnotesHeading) {
-      footnotesHeading.textContent = 'Notes';
-    }
+      // 2. Footnotes section: add DPUB-ARIA role and relabel heading to "Notes".
+      //    role="doc-endnotes" tells AT this is an endnotes section.
+      //    NOTE: Do NOT set role="doc-endnote" on individual <li> elements —
+      //    it causes Chrome to generate a custom DPUB tag instead of a standard
+      //    PDF <LI> tag, which orphans <Lbl> and <LBody> children and fails
+      //    the "Lbl and LBody must be children of LI" accessibility check.
+      document.querySelectorAll('section.footnotes').forEach(function(sec) {
+        sec.setAttribute('role', 'doc-endnotes');
+        var h = sec.querySelector('h2');
+        if (h) h.textContent = 'Notes';
+        // Remove any existing role from li elements to preserve standard list structure
+        sec.querySelectorAll('li').forEach(function(li) {
+          li.removeAttribute('role');
+        });
+      });
 
-    // 3. Book mode: filter chapters by ?essays= param
-    var params = new URLSearchParams(window.location.search);
-    var requested = params.get('essays');
-    if (requested) {
-      var allowedSlugs = requested.split(',').map(function(s) { return s.trim(); });
-      document.querySelectorAll('.print-chapter').forEach(function(ch) {
-        var slug = ch.dataset.tributary;
-        if (slug && allowedSlugs.indexOf(slug) === -1) {
-          ch.style.display = 'none';
+      // 3. Footnote back-links are useless in print — remove entirely
+      //    rather than display:none so they don't appear in the PDF tag tree.
+      document.querySelectorAll('a.reversefootnote').forEach(function(a) {
+        a.parentNode.removeChild(a);
+      });
+
+      // 4. Footnote superscript links: add accessible label so screen readers
+      //    say "footnote 1" rather than just "1".
+      document.querySelectorAll('sup[id^="fnref"] a').forEach(function(a) {
+        var num = a.textContent.trim();
+        if (num) a.setAttribute('aria-label', 'footnote ' + num);
+      });
+
+      // 5. Image links go to item pages — ensure accessible name via aria-label
+      //    for images whose alt text may be truncated.
+      document.querySelectorAll('a.spotlight.gallery-img').forEach(function(a) {
+        var img = a.querySelector('img');
+        if (img && img.alt) {
+          a.setAttribute('aria-label', img.alt);
+        }
+        // These are non-interactive in print — remove href so PDF
+        // doesn't create broken external links in the tag tree.
+        a.removeAttribute('href');
+        a.removeAttribute('data-download');
+      });
+
+      // 5a. Ensure every <img> has an alt attribute.
+      //     Images without alt are not tagged correctly in the PDF — Chrome
+      //     needs an alt attribute (even empty) to generate a Figure tag with
+      //     the /Alt PDF entry. Empty alt = decorative (AT skips it).
+      //     Content images should already have alt from metadata; this is a
+      //     safety net for any that slipped through.
+      document.querySelectorAll('img').forEach(function(img) {
+        if (!img.hasAttribute('alt')) {
+          img.setAttribute('alt', '');
         }
       });
-    }
 
-    // 4. Format selector button state
-    var currentFormat = window._printFormat || 'letter';
-    document.querySelectorAll('.format-btn').forEach(function(btn) {
-      if (btn.dataset.format === currentFormat) {
-        btn.classList.add('active');
-      }
-      btn.addEventListener('click', function() {
-        var fmt = this.dataset.format;
-        localStorage.setItem('print-format', fmt);
-        // Reload with new format param
-        var url = new URL(window.location.href);
-        url.searchParams.set('format', fmt);
-        window.location.href = url.toString();
+      // 5b. Ensure <figure> elements have an accessible label for the PDF
+      //     Figure tag. Prefer figcaption text, fall back to img alt.
+      document.querySelectorAll('figure').forEach(function(fig) {
+        if (!fig.getAttribute('aria-label') && !fig.getAttribute('aria-labelledby')) {
+          var caption = fig.querySelector('figcaption');
+          var img = fig.querySelector('img');
+          if (caption && caption.textContent.trim()) {
+            fig.setAttribute('aria-label', caption.textContent.trim());
+          } else if (img && img.alt) {
+            fig.setAttribute('aria-label', img.alt);
+          }
+        }
       });
-    });
+
+      // 6. Book mode: filter chapters by ?essays= URL param
+      var params = new URLSearchParams(window.location.search);
+      var requested = params.get('essays');
+      if (requested) {
+        var allowed = requested.split(',').map(function(s) { return s.trim(); });
+        document.querySelectorAll('.print-chapter').forEach(function(ch) {
+          if (allowed.indexOf(ch.dataset.tributary) === -1) {
+            ch.style.display = 'none';
+          }
+        });
+      }
+
+      // 7. Format selector button state + click handler
+      var currentFormat = window._printFormat || 'letter';
+      document.querySelectorAll('.format-btn').forEach(function(btn) {
+        var isActive = btn.dataset.format === currentFormat;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        btn.addEventListener('click', function() {
+          var fmt = this.dataset.format;
+          localStorage.setItem('print-format', fmt);
+          var url = new URL(window.location.href);
+          url.searchParams.set('format', fmt);
+          window.location.href = url.toString();
+        });
+      });
+    })();
   </script>
 
-  <!-- Paged.js CDN — must load AFTER content is in DOM -->
+  <!-- Paged.js CDN — loads after content is in DOM.
+       PagedConfig.auto=false (set in <head>) prevents auto-render
+       so we can register our accessibility handler first. -->
   <script src="https://unpkg.com/pagedjs/dist/paged.legacy.polyfill.js"></script>
+
+  <!-- Paged.js accessibility handler + manual render trigger -->
+  <script>
+    (function() {
+      // Handler runs after Paged.js finishes laying out all pages.
+      // Without this, injected running headers and page number boxes
+      // appear in the PDF accessibility tree and are read aloud on
+      // every page by screen readers — the handler silences them.
+      class A11yHandler extends Paged.Handler {
+        afterRendered(pages) {
+          pages.forEach(function(page) {
+            // Margin boxes hold running headers + page numbers.
+            // We use role="presentation" (not aria-hidden) so they remain in
+            // the PDF tag tree as generic content — aria-hidden would remove
+            // them from the tree entirely, causing Chrome to produce visible
+            // PDF content with no tag, which fails "All page content is tagged".
+            // role="presentation" removes semantic noise while keeping them tagged.
+            page.element.querySelectorAll('.pagedjs_margin').forEach(function(m) {
+              m.setAttribute('role', 'presentation');
+            });
+            // The page wrapper itself doesn't need a landmark role
+            page.element.setAttribute('role', 'none');
+          });
+
+          // The pre-paginated source content is hidden by Paged.js after layout.
+          // Mark it aria-hidden so AT doesn't see the content twice.
+          var source = document.getElementById('print-content');
+          if (source) source.setAttribute('aria-hidden', 'true');
+        }
+      }
+
+      Paged.registerHandlers(A11yHandler);
+
+      // Trigger layout now that handler is registered
+      window.PagedPolyfill.preview();
+    })();
+  </script>
 
 </body>
 </html>
