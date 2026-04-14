@@ -336,10 +336,18 @@
   }
 
   /**
-   * Save current session state
+   * Save current session state.
+   * Writes to sessionStorage (tab-local restore) AND to localStorage
+   * so the print hub at /print/ can always show the current session state
+   * without requiring the user to click the print button first.
    */
   function saveSession() {
     sessionStorage.setItem('eddies-loaded-sections', JSON.stringify(loadedSections));
+    // Keep the print session in sync so /print/ hub reflects current state
+    localStorage.setItem('eddies-print-session', JSON.stringify({
+      sections: loadedSections,
+      generatedAt: new Date().toISOString()
+    }));
   }
 
   /**
