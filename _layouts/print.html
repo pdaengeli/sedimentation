@@ -181,6 +181,61 @@
        ============================================================ -->
   <script>
     (function() {
+      // 0. Replace Pannellum panorama viewers with static images.
+      //    Pannellum is interactive/JS-only — unusable in PDF output.
+      //    For each inline script that initializes a pannellum.viewer(),
+      //    extract the panorama URL and caption, replace the whole block
+      //    (pannellum script tags + wrapper div) with a plain <img>.
+      document.querySelectorAll('script:not([src])').forEach(function(script) {
+        if (script.textContent.indexOf('pannellum.viewer') === -1) return;
+
+        // Extract panorama image URL
+        var urlMatch = script.textContent.match(/"panorama"\s*:\s*"([^"]+)"/);
+        if (!urlMatch) return;
+        var panoramaPath = urlMatch[1];
+
+        // Convert relative path to full CDIL URL
+        var imgSrc = panoramaPath.replace(
+          /^\/sedimentation\//,
+          'https://cdil.lib.uidaho.edu/sedimentation/'
+        );
+
+        // Find the viewer container div by ID
+        var idMatch = script.textContent.match(/pannellum\.viewer\(['"]([^'"]+)['"]/);
+        if (!idMatch) return;
+        var viewerDiv = document.getElementById(idMatch[1]);
+
+        // Find the wrapper div (.col-md-* mx-auto) and grab caption if present
+        var wrapper = viewerDiv ? viewerDiv.closest('.col-md-12, .col-md-75, .col-md-50, .col-md-25') : null;
+        var altText = '';
+        if (wrapper) {
+          var caption = wrapper.querySelector('p.text-center');
+          if (caption) altText = caption.textContent.trim();
+        }
+        if (!altText && idMatch[1]) {
+          // Fallback: derive from the panorama ID (e.g. "panorama-sediment286")
+          var objMatch = idMatch[1].match(/panorama-(.+)/);
+          if (objMatch) altText = objMatch[1] + ' panorama';
+        }
+
+        // Build replacement <img>
+        var img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = altText;
+
+        // Insert image and remove the wrapper + inline script
+        if (wrapper) {
+          wrapper.parentNode.insertBefore(img, wrapper);
+          wrapper.parentNode.removeChild(wrapper);
+        }
+        script.parentNode.removeChild(script);
+      });
+
+      // Remove pannellum CSS and JS tags — not needed for print
+      document.querySelectorAll('script[src*="pannellum"], link[href*="pannellum"]').forEach(function(el) {
+        el.parentNode.removeChild(el);
+      });
+
       // 1. Insert section-end ornaments before each choice container.
       //    aria-hidden so screen readers skip the decorative circles.
       document.querySelectorAll('.trib-choice-container').forEach(function(el) {
