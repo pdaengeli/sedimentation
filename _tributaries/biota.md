@@ -107,7 +107,7 @@ AFTER A RAINSTORM, thousands of glittering pools appear across the Colorado Plat
 
 When the water disappears, snails and mites burrow into the cool muck and encase themselves in clay. What moisture they seal into their clay cocoons will last them for the months or years until the pool fills again. Other organisms, like bacteria, algae, tardigrades, rotifers, nematodes, and the eggs of fairy shrimp and tadpole shrimp enter into cryptobiosis: a state of dormancy in which their bodies become almost completely dehydrated -- sometimes for up to ten years. 
 
-
+test test change
 
 
 
