@@ -1,6 +1,6 @@
 {%- assign citation = site.data.citations | where: "objectid", include.objectid | first -%}
 {%- if citation -%}
-<div class="row citation-item align-items-start g-4">
+<div class="row citation-item align-items-center g-4">
   <!-- Image Column -->
   <div class="col-md-5">
     {%- if citation.image_small -%}
@@ -40,7 +40,7 @@
     </p>
 
     <!-- Description -->
-    <p class="mb-3">{{ citation.description | markdownify | replace: '<p>', '' | replace: '</p>', '' }}</p>
+    <p class="mb-3 citation-description">{{ citation.description | markdownify | replace: '<p>', '' | replace: '</p>', '' }}</p>
 
     <!-- Read It Here Button -->
     <a href="{{ citation.link }}" target="_blank" class="btn btn-outline-primary btn-sm">
