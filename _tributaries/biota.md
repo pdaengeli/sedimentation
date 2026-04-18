@@ -102,8 +102,6 @@ Most of Glen Canyon's beaver ponds were drowned by Lake Powell. But as the lake 
 
 {% include feature/new-section.html %}
 
-{% include feature/new-section.html %}
-
 ## Mezosoic Lifeboats
 
 {% include feature/image-gallery.html objectid="sediment26" caption=false%}
