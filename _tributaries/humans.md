@@ -38,7 +38,7 @@ For political ecologist Laura Ogden, such processes, in which an actor -- human 
 
 "Birds claim territory through song;" she writes, "fiddler crabs dig burrows; ocean life glows with bioluminescence; beavers build lodges and dams. The suburbs are a nested architecture of inscription practices, from gated entrances to backyard privacy fences. These practices of territorial inscription leave their mark on the world, though sometimes the mark is just a shimmer." [^1]
 
-Glen Canyon's inscriptions, then, trace out a kind of territorial map, overlapping with various and often contested claims. 
+Glen Canyon's inscriptions trace out a kind of territorial map, overlapping with various kinds of claims. 
 
 This map is not flat, and its territories do not sit cleanly beside one another (as few territories do). This is a vertical and lively cartography; more like a palimpsest in which various inscriptions layer and touch, transform and efface one another through time. This is a map whose material is always in the process of erosion, recirculation, and reconfiguration as competing actors draw and redraw territory with the substrate of their predecessors.
 
@@ -57,9 +57,13 @@ Yet even in those places most ravaged by territorial erasures and remappings, th
 
 {% include feature/image-gallery.html objectid="sediment123" caption=false %}
 
-WHEN THE GLEN Canyon Dam was completed in 1963, the United States declared -- in the dam's 700-foot tall concrete walls and in the reservoir it sent spreading out over the land -- that the Canyon and its flooded tributaries were theirs. As Lake Powell bloated higher and swelled further than the river had ever reached, its waters engulfed thousands of Indigenous petroglyphs, dwellings, and trails. It bleached away, too, the microbial films that once draped the Canyon's walls, and it drowned hoards of lizards, scorpions, and snakes and the makings and markings of their lives. The lake razed swaths of coyote willow, columbines, and cottonwoods which bloomed along the river's edge, and it hid the once volatile Colorado River beneath its glossy surface. Lake Powell covered, too, the remains of Glen Canyon's early settlement efforts: it swallowed the physical residues of mining operations, the etchings made by the canyon's first white explorers, and the homesteads of its first settlers. 
+WHEN THE GLEN Canyon Dam was completed in 1963, the United States declared -- in the dam's 700-foot tall concrete walls and in the reservoir it sent spreading out over the land -- that the Canyon and its flooded tributaries were theirs. As Lake Powell bloated higher and swelled further than the river had ever reached, its waters engulfed thousands of Indigenous petroglyphs, dwellings, and trails. It bleached away, too, the microbial films that once draped the Canyon's walls, and it drowned hordes of lizards, scorpions, and snakes and the makings and markings of their lives. The lake razed swaths of coyote willow, columbines, and cottonwoods which bloomed along the river's edge, and it hid the once volatile Colorado River beneath its glossy surface. Lake Powell covered, too, the remains of Glen Canyon's early settlement efforts: it swallowed the physical residues of mining operations, the etchings made by the canyon's white explorers, and the homesteads of its first settlers. 
 
-Together, the dam and the lake visually and symbolically insist upon complete colonial territorialization, and they serve to erase the archive of the lives that came before, removing evidence of a different past, of other claims to the land. It transforms a landscape brimming with other existences into a *terra nullius*, a blank space on the map ready to be developed. This kind of subsumation props up western notions of linear progress and unidirectional time, and it reifies the belief that the present can be laid cleanly over the past like the next layer of strata. 
+Together, the dam and the lake visually and symbolically insist upon complete colonial territorialization, and they serve to erase the archive of the lives that came before, removing evidence of a different past, of other claims to the land. 
+
+That the dam was first and foremost a claim-making project is literally inscribed in the name of the agency that built it. The Bureau of Reclamation named itself after their mission to "reclaim" the lands of the West for settler use.
+
+The Bureau of Reclamation, and the dams it built, work to transform a landscape brimming with other existences into a *terra nullius*, a blank space on the map ready to be developed. This kind of subsumation props up western notions of linear progress and unidirectional time, and it reifies the belief that the present can be laid cleanly over the past like the next layer of strata. 
 
 {% include feature/image-gallery.html objectid="sediment37" caption=false%}
 
@@ -208,7 +212,7 @@ But as the drought draws Lake Powell lower, Glen Canyon and its palimpsested ins
 
 Western society -- with its Cartesian dualisms, tendencies toward commodification and extraction, and global imperialism -- has somewhat successfully abstracted the processes by which nature forges, and includes, culture. But for many other societies, place and culture are still intimately, inextricably twined. 
 
-As Silko shares, this is case for traditional Puebloan societes: Puebloan stories--which are critical modes of sharing knowledge and values -- are almost always tethered to specific geographical features, though Silko notes that "it is impossible to determine which came first, the incident or the geographical feature that begs to be brought alive in a story." [^16]
+As Silko shares, this is case for traditional Puebloan societes: Puebloan stories -- which are critical modes of sharing knowledge and values -- are almost always tethered to specific geographical features, though Silko notes that "it is impossible to determine which came first, the incident or the geographical feature that begs to be brought alive in a story." [^16]
 
 Silko illustrates the entanglements between landscape, story, and culture by recounting a family narrative: she tells of her sheepherding relatives who were killed when they strayed into the shadow of a high dark mesa, and thus could not see the Apache raiders lying in wait for them. Silko's story at once brings alive the mesa, showing its critical role in determining the life and death of her relatives, and it also embeds the memory of her relatives within the mesa: “for as long as the mesa stands,” she says, “people within the family and clan will be reminded of the story.” And, her narrative affixes instructions about how to best navigate the mesa to the mesa itself. "Thus," she emphasizes, "the continuity and accuracy" of Pueblo knowledge is "reinforced by the landscape." [^17]
 
@@ -311,7 +315,7 @@ What remains of ourselves are we leaving to the future?
 
 
 {% include feature/image-gallery.html objectid="sediment202;sediment203" caption=false%}
-{% include feature/image-gallery.html objectid="sediment277" caption="false"%}
+{% include feature/image-gallery.html objectid="sediment277" caption=false%}
 
 
 {% include feature/trib-button.html trib="humans" image="dwellings" text="Recirculate" %}

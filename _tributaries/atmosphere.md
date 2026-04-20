@@ -326,9 +326,9 @@ Thus, the currents of change that flow through Glen Canyon become inextricably e
 
 ALONGSIDE GLEN CANYON’S radium beds and methane volcanoes, an ecosystem that is both new and old is emerging. As the reservoir dries up, plants have been quick to take root in the Canyon's freshly-exposed banks. The first plants to arrive are usually invasive—tumbleweed, cheatgrass, and camelthorn. But a few years after the water recedes, native species, too, return. Scientists have yet to fully explore Glen Canyon’s resurgence, but one biologist declared a recently resurfaced tributary canyon "the most intact native ecosystem I've ever seen.” [^33]
 
-As I read about Glen Canyon's history, and about the progression of climate change, it is easy to imagine a story of steady, unidirectional degradation, an unrelenting fall towards widespread ruin and destruction. But when I learned that Glen Canyon is once again blossoming with fremont cottonwood, coyote willow, paintbrush, hackberry, Western redbuds, singleleaf ash, maidenhair fern, and columbine, I felt, for the first time since I can remember, that perhaps there are other, more vibrant possibilities for the future. I cannot trace a story of uniform decline through a landscape in bloom. 
+As I read about Glen Canyon's history, and about the progression of climate change, it is easy to imagine a story of steady, unidirectional degradation, an unrelenting fall towards widespread ruin. But when I learned that Glen Canyon is once again blossoming with coyote willow, paintbrush, hackberry, maidenhair fern, and columbine, I felt, for the first time since I can remember, that perhaps there are other, more vibrant possibilities for the future. I cannot trace a story of uniform decline through a landscape in bloom. 
 
-In Glen Canyon, the out-of-control superstorm that is climate change and human recklessness has paradoxically caused time to stutter and reel back on itself. The seemingly unstoppable, forward-hurtling train of anthropogenic domination and inundation has —- for a moment, at least —- burnt itself to a stop. And as Lake Powell retreats, a landscape is surfacing that insists, in every flowering columbine, in every shifting silt bed, that even amidst ruination, there remain opportunities for rearrangement and regrowth. 
+In Glen Canyon, the out-of-control superstorm that is climate change and human recklessness has paradoxically caused time to stutter and reel back on itself. The seemingly unstoppable, forward-hurtling train of anthropogenic domination and inundation has -- for a moment, at least -- burnt itself to a stop. And as Lake Powell retreats, a landscape is surfacing that insists, in every flowering columbine, in every shifting silt bed, that even amidst ruination, there remain opportunities for rearrangement and regrowth. 
 
 {% include feature/image-gallery.html objectid="sediment120" caption=false%}
 
@@ -340,7 +340,7 @@ This whorl of time -- in which (some) humans are able to inflict unfettered disr
 
 What might I learn from listening to the stories embedded in Glen Canyon's sediment? What can flowers teach me about resilience? What does the wind have to say about bringing together coalitions? How do the people who have lived in this landscape for hundreds and thousands of years understand it? Can ebbing waters be an example for ceding land back to original inhabitants? What do microorganisms know about remediation? Can humans lead with the same resilience, collaboration, and grace? 
 
-{% include feature/trib-button.html trib="atmosphere" image="atmosphere" text="Recirculate" anchor="wind-memories" %}
+{% include feature/trib-button.html trib="biota/#lines-of-flight" image="vegetation" text="Lines of Flight" anchor="wind-memories" %}
 
 
 {% include feature/new-section.html %}

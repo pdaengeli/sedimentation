@@ -12,6 +12,10 @@ scrollama: true
 
 # WATER
 
+
+{% include feature/image-gallery.html objectid="sediment200" caption=false%} 
+
+
 ## More than River
 
 Coming soon!
