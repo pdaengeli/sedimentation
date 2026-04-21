@@ -2,23 +2,29 @@
 <!--
   PRINT LAYOUT — Standalone (no default.html inheritance)
   =========================================================
-  Used for:
-    - Individual tributary essay print pages (/print/[slug]/)
-    - Full book PDF (/print/book/)
+  Routes:
+    /print/[slug]/   — single tributary essay
+    /print/book/     — full book (all essays)
 
-  ACCESSIBILITY APPROACH:
-  Chrome's print-to-PDF generates tagged PDF structure from the HTML
-  accessibility tree. To produce a usable tagged PDF we:
-    - Provide document-level metadata (title, author, language, description)
-    - Use semantic HTML landmarks (<main>, proper heading hierarchy)
-    - Mark all decorative SVGs aria-hidden="true" so they're invisible to AT
-    - Use a Paged.js afterRendered handler to mark injected margin boxes
-      (running headers, page numbers) aria-hidden — without this, every
-      running header is read aloud on every page by screen readers
-    - Set window.PagedConfig = { auto: false } to control render timing
-      so the handler is registered before layout begins
-    - Apply DPUB-ARIA roles to footnote sections (role="doc-endnotes")
-    - Preserve img alt text from collection metadata throughout
+  URL PARAMETERS:
+    ?format=letter|a4|69     Page size (persisted to localStorage)
+    ?essays=slug1,slug2,...  Book mode: limit to specified chapters
+
+  GENERATING BOOKMARKED PDFs:
+    Browser "Save as PDF" cannot produce PDF bookmarks. Use pagedjs-cli:
+      bundle exec jekyll serve
+      rake generate_pdfs
+
+  ACCESSIBILITY:
+    Chrome's PDF engine builds a tagged PDF from the HTML accessibility tree.
+    Key decisions in this layout:
+    - <figure> elements are replaced with <div class="figure"> before layout
+      so the img's alt is the only accessible name in the PDF tag tree.
+    - Paged.js margin boxes (running headers, page numbers) get aria-hidden="true"
+      to mark them as pagination artifacts — excluded from the PDF tag tree.
+    - Footnote sections get role="doc-endnotes" (DPUB-ARIA).
+    - window.PagedConfig = { auto: false } delays Paged.js until the
+      A11yHandler is registered.
 -->
 <html lang="en">
 <head>
@@ -74,6 +80,7 @@
     </div>
 
     <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+    <p class="print-bookmark-note">For a PDF with bookmarks, use <code>rake generate_pdfs</code>.</p>
   </nav>
 
   <!-- Main content — landmark used by screen readers to skip to content -->
@@ -251,75 +258,59 @@
         el.parentNode.insertBefore(ornament, el);
       });
 
-      // 2. Footnotes section: add DPUB-ARIA role and relabel heading to "Notes".
-      //    role="doc-endnotes" tells AT this is an endnotes section.
-      //    NOTE: Do NOT set role="doc-endnote" on individual <li> elements —
-      //    it causes Chrome to generate a custom DPUB tag instead of a standard
-      //    PDF <LI> tag, which orphans <Lbl> and <LBody> children and fails
-      //    the "Lbl and LBody must be children of LI" accessibility check.
+      // 2. Footnotes: DPUB-ARIA role on section; relabel heading to "Notes".
+      //    Do NOT set role="doc-endnote" on <li> — it generates a non-standard
+      //    PDF tag that orphans <Lbl>/<LBody> children and fails accessibility checks.
       document.querySelectorAll('section.footnotes').forEach(function(sec) {
         sec.setAttribute('role', 'doc-endnotes');
         var h = sec.querySelector('h2');
         if (h) h.textContent = 'Notes';
-        // Remove any existing role from li elements to preserve standard list structure
-        sec.querySelectorAll('li').forEach(function(li) {
-          li.removeAttribute('role');
-        });
+        sec.querySelectorAll('li').forEach(function(li) { li.removeAttribute('role'); });
       });
 
-      // 3. Footnote back-links are useless in print — remove entirely
-      //    rather than display:none so they don't appear in the PDF tag tree.
+      // 3. Footnote back-links: remove from DOM so they don't appear in the PDF tag tree.
       document.querySelectorAll('a.reversefootnote').forEach(function(a) {
         a.parentNode.removeChild(a);
       });
 
-      // 4. Footnote superscript links: add accessible label so screen readers
-      //    say "footnote 1" rather than just "1".
+      // 4. Footnote superscript links: label so AT announces "footnote 1" not just "1".
       document.querySelectorAll('sup[id^="fnref"] a').forEach(function(a) {
         var num = a.textContent.trim();
         if (num) a.setAttribute('aria-label', 'footnote ' + num);
       });
 
-      // 5. Image links go to item pages — ensure accessible name via aria-label
-      //    for images whose alt text may be truncated.
+      // 5. Image links: set aria-label from img alt; remove href so PDF doesn't
+      //    produce broken links to item pages.
       document.querySelectorAll('a.spotlight.gallery-img').forEach(function(a) {
         var img = a.querySelector('img');
-        if (img && img.alt) {
-          a.setAttribute('aria-label', img.alt);
-        }
-        // These are non-interactive in print — remove href so PDF
-        // doesn't create broken external links in the tag tree.
+        if (img && img.alt) a.setAttribute('aria-label', img.alt);
         a.removeAttribute('href');
         a.removeAttribute('data-download');
       });
 
-      // 5a. Ensure every <img> has an alt attribute.
-      //     Images without alt are not tagged correctly in the PDF — Chrome
-      //     needs an alt attribute (even empty) to generate a Figure tag with
-      //     the /Alt PDF entry. Empty alt = decorative (AT skips it).
-      //     Content images should already have alt from metadata; this is a
-      //     safety net for any that slipped through.
+      // 5a. Ensure every <img> has an alt attribute. Chrome requires it (even if
+      //     empty) to generate a properly tagged PDF Figure entry.
       document.querySelectorAll('img').forEach(function(img) {
-        if (!img.hasAttribute('alt')) {
-          img.setAttribute('alt', '');
-           
-        }
-         img.removeAttribute('loading');
+        if (!img.hasAttribute('alt')) img.setAttribute('alt', '');
+        img.removeAttribute('loading');
         img.removeAttribute('style');
       });
 
-      // 5b. Ensure <figure> elements have an accessible label for the PDF
-      //     Figure tag. Prefer figcaption text, fall back to img alt.
+      // 5b. Replace <figure> → <div class="figure"> and <figcaption> → <div class="figure-caption">.
+      //     <figure> maps to a PDF Figure tag that shadows the img's alt when the
+      //     container also carries an accessible name. Using a plain div leaves the
+      //     img as the only Figure tag in the PDF tree with its alt directly accessible.
       document.querySelectorAll('figure').forEach(function(fig) {
-        if (!fig.getAttribute('aria-label') && !fig.getAttribute('aria-labelledby')) {
-          var caption = fig.querySelector('figcaption');
-          var img = fig.querySelector('img');
-          if (caption && caption.textContent.trim()) {
-            fig.setAttribute('aria-label', caption.textContent.trim());
-          } else if (img && img.alt) {
-            fig.setAttribute('aria-label', img.alt);
-          }
-        }
+        var div = document.createElement('div');
+        div.className = fig.className || 'figure';
+        div.innerHTML = fig.innerHTML;
+        fig.parentNode.replaceChild(div, fig);
+      });
+      document.querySelectorAll('figcaption').forEach(function(cap) {
+        var div = document.createElement('div');
+        div.className = (cap.className ? cap.className + ' ' : '') + 'figure-caption';
+        div.innerHTML = cap.innerHTML;
+        cap.parentNode.replaceChild(div, cap);
       });
 
       // 6. Book mode: filter chapters by ?essays= URL param
@@ -352,43 +343,36 @@
   </script>
 
   <!-- Paged.js CDN — loads after content is in DOM.
-       PagedConfig.auto=false (set in <head>) prevents auto-render
-       so we can register our accessibility handler first. -->
+       PagedConfig.auto=false (set in <head>) delays auto-render until
+       the A11yHandler is registered below. -->
   <script src="https://unpkg.com/pagedjs/dist/paged.legacy.polyfill.js"></script>
 
-  <!-- Paged.js accessibility handler + manual render trigger -->
+  <!-- Register accessibility handler, then trigger layout. -->
   <script>
     (function() {
-      // Handler runs after Paged.js finishes laying out all pages.
-      // Without this, injected running headers and page number boxes
-      // appear in the PDF accessibility tree and are read aloud on
-      // every page by screen readers — the handler silences them.
+      // Runs after Paged.js lays out all pages. Marks injected margin boxes
+      // (running headers, page numbers) aria-hidden so they are excluded from
+      // the PDF tag tree as pagination artifacts per PDF/UA requirements.
       class A11yHandler extends Paged.Handler {
         afterRendered(pages) {
           pages.forEach(function(page) {
-            // Margin boxes hold running headers + page numbers.
-            // We use role="presentation" (not aria-hidden) so they remain in
-            // the PDF tag tree as generic content — aria-hidden would remove
-            // them from the tree entirely, causing Chrome to produce visible
-            // PDF content with no tag, which fails "All page content is tagged".
-            // role="presentation" removes semantic noise while keeping them tagged.
             page.element.querySelectorAll('.pagedjs_margin').forEach(function(m) {
-              m.setAttribute('role', 'presentation');
+              m.setAttribute('aria-hidden', 'true');
             });
-            // The page wrapper itself doesn't need a landmark role
+            page.element.querySelectorAll('.pagedjs_margin-content').forEach(function(mc) {
+              mc.setAttribute('aria-hidden', 'true');
+            });
             page.element.setAttribute('role', 'none');
           });
 
-          // The pre-paginated source content is hidden by Paged.js after layout.
-          // Mark it aria-hidden so AT doesn't see the content twice.
+          // The original source is hidden by Paged.js after layout.
+          // Mark aria-hidden so AT doesn't encounter the content twice.
           var source = document.getElementById('print-content');
           if (source) source.setAttribute('aria-hidden', 'true');
         }
       }
 
       Paged.registerHandlers(A11yHandler);
-
-      // Trigger layout now that handler is registered
       window.PagedPolyfill.preview();
     })();
   </script>

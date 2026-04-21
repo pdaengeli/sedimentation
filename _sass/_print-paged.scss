@@ -196,6 +196,9 @@ footer,
 .print-essay-title { string-set: essay-title content(text); }
 h2 { string-set: section-heading content(text); }
 
+/* PDF bookmarks (bookmark-level, bookmark-label) are not supported by paged.js.
+   Use rake generate_pdfs with pagedjs-cli --outline-tags to produce bookmarked PDFs. */
+
 h1 {
   font-family: 'Spectral', Georgia, serif;
   font-size: 30pt;
@@ -204,10 +207,6 @@ h1 {
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: #1c1208;
-  /* PDF bookmarks — Paged.js uses these to generate the PDF outline/navigation panel */
-  bookmark-level: 1;
-  bookmark-label: content(text);
-  bookmark-state: open;
 }
 
 h2 {
@@ -219,9 +218,6 @@ h2 {
   margin-bottom: 0.75rem;
   color: #3a2d1a;
   break-after: avoid;
-  bookmark-level: 2;
-  bookmark-label: content(text);
-  bookmark-state: closed;
 }
 
 h3 {
@@ -234,9 +230,6 @@ h3 {
   margin-bottom: 0.6rem;
   color: #4a3c26;
   break-after: avoid;
-  bookmark-level: 3;
-  bookmark-label: content(text);
-  bookmark-state: closed;
 }
 
 p {
@@ -284,12 +277,9 @@ ul, ol {
 
 
 /* ============================================================
-   IMAGES — global, fixed constraints so size is consistent
-   regardless of which include generated the image or what
-   Bootstrap class was applied.
+   IMAGES
    ============================================================ */
 
-/* Strip any inline max-height styles from image-aside.html */
 img {
   max-width: 100% !important;
   max-height: 4in !important; /* prevents any single image from dominating a page */
@@ -298,9 +288,11 @@ img {
 }
 
 figure,
+.figure,
 .spotlight,
 .feature-img,
 .cb-image-wrap {
+  display: block;
   break-inside: avoid;
   margin: 1.25rem 0;
   max-width: 100%;
@@ -378,8 +370,6 @@ video {
   max-width: none;
 }
 
-/* figure sizing utility from image-gallery */
-.figure { display: block; margin: 0; }
 .figure-img { display: block; }
 .img-fluid {
   max-width: 100% !important;
@@ -678,6 +668,18 @@ section.footnotes {
     white-space: nowrap;
 
     &:hover { color: #2a2016; }
+  }
+
+  .print-bookmark-note {
+    font-size: 0.65rem;
+    color: #9a8a72;
+    margin: 0;
+    white-space: nowrap;
+
+    code {
+      font-family: 'Inconsolata', monospace;
+      font-size: inherit;
+    }
   }
 }
 

@@ -5,30 +5,19 @@
   Renders the user's current Eddies CYOA session as a printable document.
 
   DATA FLOW:
-    1. Before navigating here, eddies-cyoa-js.html copies loadedSections
-       (array of {tributarySlug, id}) to localStorage['eddies-print-session'].
+    1. eddies-cyoa-js.html copies loadedSections (array of {tributarySlug, id})
+       to localStorage['eddies-print-session'] before navigating here.
     2. This page fetches /assets/data/tributaries.json (built by Jekyll).
-    3. For each section key in the stored session, it finds the matching
-       section's html_content in the JSON and renders it.
-    4. After all sections are rendered, window.PagedPolyfill.preview() is
-       called so Paged.js paginates the content.
+    3. For each section in the stored session, it renders the matching
+       html_content from the JSON.
+    4. window.PagedPolyfill.preview() paginates the rendered content.
 
-  Empty state: if no session data exists, shows a message with a link back.
+  Empty state: if no session data exists, shows a link back to Eddies.
 
-  ACCESSIBILITY APPROACH:
-  Chrome's print-to-PDF generates tagged PDF structure from the HTML
-  accessibility tree. To produce a usable tagged PDF we:
-    - Provide document-level metadata (title, author, language, description)
-    - Use semantic HTML landmarks (<main>, proper heading hierarchy)
-    - Mark all decorative SVGs aria-hidden="true" so they're invisible to AT
-    - Use a Paged.js afterRendered handler to mark injected margin boxes
-      (running headers, page numbers) aria-hidden — without this, every
-      running header is read aloud on every page by screen readers
-    - Set window.PagedConfig = { auto: false } to control render timing
-      so the handler is registered before layout begins
-    - Register the A11yHandler before calling window.PagedPolyfill.preview()
+  URL PARAMETERS:
+    ?format=letter|a4|69   Page size (persisted to localStorage)
 
-  Format override works identically to print.html — ?format= URL param.
+  ACCESSIBILITY: same approach as print.html — see that file for details.
 -->
 <html lang="en">
 <head>
@@ -235,18 +224,13 @@
       // ——— Post-render accessibility prep ———
       // (mirrors the prep in print.html for consistent PDF tag tree)
 
-      // Footnotes section: add DPUB-ARIA role and relabel heading to "Notes".
-      // Do NOT set role="doc-endnote" on <li> elements — it causes Chrome to
-      // generate a custom DPUB PDF tag instead of a standard <LI>, which orphans
-      // <Lbl> and <LBody> children and fails the Lbl/LBody accessibility check.
+      // Footnotes: DPUB-ARIA role on section; relabel heading to "Notes".
+      // Do NOT set role="doc-endnote" on <li> — generates non-standard PDF tags.
       container.querySelectorAll('section.footnotes').forEach(function(sec) {
         sec.setAttribute('role', 'doc-endnotes');
         var h = sec.querySelector('h2');
         if (h) h.textContent = 'Notes';
-        // Remove any role from li to preserve standard PDF list structure
-        sec.querySelectorAll('li').forEach(function(li) {
-          li.removeAttribute('role');
-        });
+        sec.querySelectorAll('li').forEach(function(li) { li.removeAttribute('role'); });
       });
 
       // Footnote back-links: remove from DOM entirely (useless in print;
@@ -278,17 +262,19 @@
         }
       });
 
-      // Ensure <figure> elements have an accessible label for the PDF Figure tag
+      // Replace <figure> → <div class="figure"> so img alt is the only accessible
+      // name in the PDF tag tree (see print.html for full rationale).
       container.querySelectorAll('figure').forEach(function(fig) {
-        if (!fig.getAttribute('aria-label') && !fig.getAttribute('aria-labelledby')) {
-          var caption = fig.querySelector('figcaption');
-          var img = fig.querySelector('img');
-          if (caption && caption.textContent.trim()) {
-            fig.setAttribute('aria-label', caption.textContent.trim());
-          } else if (img && img.alt) {
-            fig.setAttribute('aria-label', img.alt);
-          }
-        }
+        var div = document.createElement('div');
+        div.className = fig.className || 'figure';
+        div.innerHTML = fig.innerHTML;
+        fig.parentNode.replaceChild(div, fig);
+      });
+      container.querySelectorAll('figcaption').forEach(function(cap) {
+        var div = document.createElement('div');
+        div.className = (cap.className ? cap.className + ' ' : '') + 'figure-caption';
+        div.innerHTML = cap.innerHTML;
+        cap.parentNode.replaceChild(div, cap);
       });
 
       // Section-end ornaments before any choice containers
@@ -312,23 +298,20 @@
         if (window.Paged && window.PagedPolyfill &&
             typeof window.PagedPolyfill.preview === 'function') {
 
-          // Register accessibility handler before layout begins.
-          // Marks injected margin boxes (running headers, page numbers)
-          // aria-hidden so screen readers don't announce them on every page.
           class EddiesA11yHandler extends Paged.Handler {
             afterRendered(pages) {
               pages.forEach(function(page) {
-                // Use role="presentation" (not aria-hidden) so margin boxes remain
-                // in the PDF tag tree — aria-hidden would cause "untagged content"
-                // checker failures since the text is still visually rendered.
+                // Mark margin boxes (running headers, page numbers) as pagination
+                // artifacts — excluded from the PDF tag tree per PDF/UA.
                 page.element.querySelectorAll('.pagedjs_margin').forEach(function(m) {
-                  m.setAttribute('role', 'presentation');
+                  m.setAttribute('aria-hidden', 'true');
+                });
+                page.element.querySelectorAll('.pagedjs_margin-content').forEach(function(mc) {
+                  mc.setAttribute('aria-hidden', 'true');
                 });
                 page.element.setAttribute('role', 'none');
               });
 
-              // Paged.js hides the original source content after layout.
-              // Mark it aria-hidden so AT doesn't see the content twice.
               var source = document.getElementById('print-eddies-content');
               if (source) source.setAttribute('aria-hidden', 'true');
             }
