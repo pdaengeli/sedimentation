@@ -10,7 +10,9 @@ scrollama: true
 # Look in _includes/feature for options to easily add features to the page
 ---
 
-# Abouts
+# About
+
+
 
 ## About Glen Canyon
 
@@ -47,7 +49,7 @@ As a writer concerned about environmental justice, I am compelled to write about
 
 ## Who We Are
 
-*Sedimentation* was created by Hannah Green and Devin Becker with support from the University of Idaho's [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu/).
+*Sedimentation* was created by Hannah Green with support from Devin Becker and the University of Idaho's [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu/).
 
 <div class="bio-block" markdown="1">
 
@@ -63,7 +65,9 @@ As a writer concerned about environmental justice, I am compelled to write about
 
 {% include feature/image.html objectid="/objects/devin.png" caption=false width="25" %}
 
-**Devin Becker** is the Associate Dean for Research and Instruction at the University of Idaho Library, where he also co-directs the Center for Digital Inquiry and Learning (CDIL) and oversees the development of the digital exhibit frameworks CollectionBuilder, Oral History as Data, and Digital Dramaturgy. Learn more about Devin on [his website](https://devinbecker.org/).
+**Devin Becker** is the Associate Dean for Research and Instruction at the University of Idaho Library, where he also co-directs the Center for Digital Inquiry and Learning (CDIL) and oversees the development of the digital exhibit frameworks CollectionBuilder, Oral History as Data, and Digital Dramaturgy. 
+
+Devin helped design and code the website in and through conversations with Hannah over the course her fellowship. 
 
 </div>
 
