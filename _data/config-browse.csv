@@ -4,5 +4,6 @@ creator,Creator,,,
 subject,,true
 location,,true
 damtime,,true,true
+damspace,,true,true
 submerged,,true,true
 identifier,,,true,Identifier
