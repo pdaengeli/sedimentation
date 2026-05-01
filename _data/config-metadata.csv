@@ -1,17 +1,22 @@
 field,display_name,browse_link,external_link,dc_map,schema_map
 title,Title,,,DCTERMS.title,headline
 creator,Creator,,,DCTERMS.creator,creator
-date,Date Created,,,DCTERMS.date,dateCreated
+archivaldate,Date Created,,,DCTERMS.date,dateCreated
 description,Description,,,DCTERMS.description,description
 subject,Subjects,true,,DCTERMS.subject,keywords
 location,Location,true,,,contentLocation
+damspace,Location in Relation to Dam,true
 damtime,Pre/Post Dam,true,,,
 submerged,Submersion,true,,,
 latitude,Latitude,,,,
 longitude,Longitude,,,,
-source,Source,,,,
-identifier,Source Identifier,,,,
+repository,Source,,,,
 type,Type,,,DCTERMS.type,
 format,Format,,,,encodingFormat
 language,Language,,,DCTERMS.language,
 rightsstatement,,,,DCTERMS.rights,license
+originaltitle,NAU Title
+originalfilename,NAU Filename
+itemnumber,Original Item Number
+callnumber,Call Number
+sourcelink,Link to Original
