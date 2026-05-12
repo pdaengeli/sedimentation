@@ -52,8 +52,11 @@ As a writer concerned about environmental justice, I am compelled to write about
 *Sedimentation* was created by Hannah Green with support from Devin Becker and the University of Idaho's [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu/).
 
 <div class="bio-block" markdown="1">
+<a id="hannah-green"></a>
 
-{% include feature/image.html objectid="/objects/Me.png" caption=false width="25"%}
+### Hannah Green
+
+{% include feature/image.html objectid="/objects/Me.png" width="50" caption=false%}
 
 **Hannah Green** is an English M.A. student at the University of Idaho. Before beginning her graduate studies, Hannah lived and worked along the Colorado River corridor as a crew leader with the Arizona Conservation Corps. Her interest in Glen Canyon began with a visit to Lake Powell, an experience that was both viscerally disturbing and question-provoking. What stories, she wanted to know, lay hidden beneath the lake's glossy surface? As the lake recedes, how are these histories reemerging to shape the present? And might Glen Canyon's past offer some guidance about how to adapt to an increasingly precarious future? 
 
@@ -62,14 +65,20 @@ As a writer concerned about environmental justice, I am compelled to write about
 </div>
 
 <div class="bio-block" markdown="1">
+<a id="devin-becker"></a>
 
-{% include feature/image.html objectid="/objects/devin.png" caption=false width="25" %}
+### Devin Becker
+
+{% include feature/image.html objectid="/objects/devin.png" caption=false width="50" %}
 
 **Devin Becker** is the Associate Dean for Research and Instruction at the University of Idaho Library, where he also co-directs the Center for Digital Inquiry and Learning (CDIL) and oversees the development of the digital exhibit frameworks CollectionBuilder, Oral History as Data, and Digital Dramaturgy. 
 
 Devin helped design and code the website in and through conversations with Hannah over the course her fellowship. 
 
 </div>
+
+<div class="bio-block" markdown="1">
+<a id="thanks-also-to"></a>
 
 **Thanks also to**: Dr. Jennifer Ladino, Dr. Erin James, Dr. Aly Kreikemeier, and Chris Lamb, all of whom have nurtured, guided, and supported this project from start to finish.
  
