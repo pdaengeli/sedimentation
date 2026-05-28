@@ -15,8 +15,8 @@ type,Type,,,DCTERMS.type,
 format,Format,,,,encodingFormat
 language,Language,,,DCTERMS.language,
 rightsstatement,,,,DCTERMS.rights,license
-originaltitle,NAU Title
-originalfilename,NAU Filename
+originaltitle,Original Repository Title
+originalfilename,Original Repository Filename
 itemnumber,Original Item Number
 callnumber,Call Number
 sourcelink,Link to Original

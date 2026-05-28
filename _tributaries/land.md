@@ -73,7 +73,6 @@ What I hope to contribute here is a further examination of my own inherited West
 
 LAST WINTER, I visited Lone Rock, a solitary butte that rises high out of Wahweap Bay, one of Lake Powell's coves. Decades ago, when the lake was at full pool, Lone Rock was encircled by deep water. But the lake has long since retreated, leaving behind vast plains of sand and a shallow puddle of lake. Even as I walked down the sand flats, towards the rock, I could see that the beach had grown longer and the lake smaller since I had last been to Lone Rock four years before. With the lake shrunk down, Lone Rock seemed taller, its bleached bathtub ring wider. Over a period so short I could not have pointed to any measurable change in the composition of my own body, the contours of the land had been remade, though in this case by shifting water, not shifting earth. 
 
-{% include feature/image-gallery.html objectid="sediment329" caption=false%}
 {% include feature/image-gallery.html objectid="sediment220" caption=false%}
 
 In other places, the earth's contours are maintained by water, and are remade in its absence. Two days before I went to Lone Rock, I took a walking tour of Antelope Canyon, whose pink swerving walls you might recognize from many a stock computer background. Deep in the canyon, our guide pointed to a rock that bulged out into the shape of George Washington's profile, and then she pulled out her phone to show the group a photograph of the same place five years earlier. 

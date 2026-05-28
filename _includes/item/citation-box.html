@@ -1,7 +1,13 @@
 {% comment %}
 
-    Adds a basic citation box for the item with reference link to the item page.
-    For items with NAU call numbers, uses NAU library citation format.
+    Adds a citation box for the item with a reference link to the item page.
+    Citation format is chosen based on repository and creator fields:
+
+    1. Huntington Library — preferred format: originaltitle. callnumber. collectionname. repository.
+    2. Northern Arizona University — NAU preferred format: title. callnumber. Colorado Plateau Archives. Cline Library.
+    3. Hannah Green original photographs — creator credit format: Green, Hannah. "title." Photograph. site.title, date.
+    4. Other named repositories — generic archival format: originaltitle. callnumber. collectionname. repository.
+    5. Fallback — project citation: title, site.title, site.organization-name
 
 {%- endcomment -%}
 <div class="card">
@@ -9,8 +15,14 @@
     <div class="card-body">
         <dl>
             <dt>Preferred Citation:</dt>
-            {% if page.callnumber %}
+            {% if page.repository contains "Huntington" %}
+            <dd>"{{ page.originaltitle }}". {{ page.callnumber }}. {{ page.collectionname }}. {{ page.repository }}.{% if page.sourcelink %} <a href="{{ page.sourcelink }}" target="_blank">{{ page.sourcelink }}</a>{% endif %}</dd>
+            {% elsif page.repository contains "Northern Arizona University" %}
             <dd>"{{ page.title }}". {{ page.callnumber }}. Colorado Plateau Archives. Special Collections and Archives, Cline Library, Northern Arizona University.{% if page.sourcelink %} <a href="{{ page.sourcelink }}" target="_blank">{{ page.sourcelink }}</a>{% endif %}</dd>
+            {% elsif page.creator contains "Green" %}
+            <dd>Green, Hannah. "{{ page.title }}." Photograph. {{ site.title }}, {{ page.date }}.</dd>
+            {% elsif page.repository != "" %}
+            <dd>"{{ page.originaltitle }}". {{ page.callnumber }}. {{ page.collectionname }}. {{ page.repository }}.{% if page.sourcelink %} <a href="{{ page.sourcelink }}" target="_blank">{{ page.sourcelink }}</a>{% endif %}</dd>
             {% else %}
             <dd>"{{ page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
             {% endif %}

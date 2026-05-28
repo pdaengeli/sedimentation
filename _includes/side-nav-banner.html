@@ -503,10 +503,11 @@
             segmentsGroup.innerHTML = '';
 
             const viewBoxHeight = 700;
-            const sectionCount = trib.sections.length;
+            const filteredSections = trib.sections.filter(s => !/^works cited$/i.test(s.heading.trim()));
+            const sectionCount = filteredSections.length;
             const segmentHeight = Math.floor((viewBoxHeight - 10) / sectionCount) - 5;
 
-            trib.sections.forEach((section, index) => {
+            filteredSections.forEach((section, index) => {
                 const yPos = 10 + (index * (segmentHeight + 5));
                 
                 const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -547,8 +548,9 @@
                 const sectionsContainer = dropdown.querySelector('.tributary-sections');
                 if (sectionsContainer && trib.sections && trib.sections.length > 0) {
                     sectionsContainer.innerHTML = '';
+                    const navSections = trib.sections.filter(s => !/^works cited$/i.test(s.heading.trim()));
 
-                    trib.sections.forEach(section => {
+                    navSections.forEach(section => {
                         const a = document.createElement('a');
                         a.href = `{{ "/tributaries/" | relative_url }}${trib.slug}/#${section.id}`;
                         a.textContent = section.heading;
